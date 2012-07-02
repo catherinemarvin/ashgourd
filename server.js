@@ -29,6 +29,7 @@ var addRoom = function (name, roomId, game, res){
 	rooms[roomId] = game;
 	//res.redirect("http://localhost/room/"+name+"/"+roomId);
 	//res.redirect("http://www.google.com");
+	console.log("location: " + "/room/"+name+"/"+roomId)
 	res.send({'location': "/room/"+name+"/"+roomId});
 
 }
@@ -40,6 +41,10 @@ var checkMobile = function (userAgent) {
 
 server.get("/", function (req, res) {
 	res.render('index');
+});
+
+server.get("/test", function (req, res) {
+	res.render("private");
 });
 
 server.get("/room/:roomId", function (req, res) {
@@ -69,8 +74,10 @@ server.get("/room/:name/:roomId", function (req, res) {
 		console.log("rendering board");
 		//res.render("board", game.gameState)
 		res.render("board", {gameState : game.gameState});
+		//res.render("private");
 	}
 	else{
+		console.log("rendering private view");
 		//res.render("private" , game.players[name])
 		res.render("private");
 	}
