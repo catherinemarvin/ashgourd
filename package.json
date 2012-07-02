@@ -1,0 +1,20 @@
+{
+	"name" : "ashgourd",
+	"version" : "0.0.1",
+	"author" : "Ajay & Kevin",
+	"description" : "Play a board game with your phone around a computer!",
+	"contributors" : [
+		{
+			"name" : "Kevin Hwang",
+			"email" : "k3vinhwang@gmail.com"
+		},
+		{
+			"name" : "Ajay Tripathy",
+			"email" : "4tripathy@gmail.com"
+		}
+	],
+	"dependencies" : {
+		"ejs" : "0.7.1",
+		"express" : "2.5.8"
+	}
+}
