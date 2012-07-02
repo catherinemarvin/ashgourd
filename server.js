@@ -1,7 +1,7 @@
 var express = require("express");
 var logic = require("./lib/Game");
-var io = require('socket.io').listen(server),
-var server = express.createServer()
+var io = require('socket.io').listen(server);
+var server = express.createServer();
 
 server.use(express.bodyParser());
 
@@ -77,7 +77,10 @@ server.get("/room/:name/:roomId", function (req, res) {
 })
 
 io.sockets.on('connection', function(socket) {
-  
+  socket.emit('identify');
+  socket.on('checkIn', function (incoming) {
+      
+  }); 
 
 })
 
