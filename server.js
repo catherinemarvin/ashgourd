@@ -75,7 +75,7 @@ server.get("/room/:name/:roomId", function (req, res) {
 		res.render("private");
 	}
 })
-
+/*
 io.sockets.on('connection', function(socket) {
   socket.emit('identify');
   socket.on('checkIn', function (incoming) {
@@ -83,7 +83,7 @@ io.sockets.on('connection', function(socket) {
   }); 
 
 })
-
+*/
 
 server.listen(80);
 console.log("Express server started.");
