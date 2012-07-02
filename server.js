@@ -1,6 +1,6 @@
 var express = require("express");
-var logic = require("./Game");
-
+var logic = require("./lib/Game");
+var io = require('socket.io').listen(server),
 var server = express.createServer()
 
 server.use(express.bodyParser());
@@ -68,18 +68,17 @@ server.get("/room/:name/:roomId", function (req, res) {
 	if (name === "board"){
 		console.log("rendering board");
 		//res.render("board", game.gameState)
-		res.render("board");
+		res.render("board", {gameState : game.gameState});
 	}
 	else{
-		console.log('rendering player');
-		if ( ! game.players[name]){
-			console.log('adding player');
-			game.addPlayer(name)
-		}
-		console.log("rendering private");
 		//res.render("private" , game.players[name])
 		res.render("private");
 	}
+})
+
+io.sockets.on('connection', function(socket) {
+  
+
 })
 
 
