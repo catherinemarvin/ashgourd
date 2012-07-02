@@ -1,7 +1,7 @@
 var express = require("express");
 var logic = require("./lib/Game");
-var io = require('socket.io').listen(server);
 var server = express.createServer();
+var io = require('socket.io').listen(server);
 
 server.use(express.bodyParser());
 
