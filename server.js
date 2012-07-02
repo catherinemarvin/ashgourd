@@ -1,4 +1,5 @@
 var express = require("express");
+var logic = require("./Game");
 
 var server = express.createServer()
 
@@ -12,6 +13,7 @@ server.set("view engine", "ejs");
 server.set("views", __dirname + "/views");
 server.use("/static", express.static(__dirname + "/static"));
 
+var rooms = {}
 /*
 var agent = navigator.userAgent.toLowerCase();
 			var usePrivateView = ((agent.indexOf('iphone') != -1) || (agent.indexOf("android") != -1));
@@ -22,19 +24,64 @@ var agent = navigator.userAgent.toLowerCase();
 			}
 			*/
 
+var addRoom = function (name, roomId, game, res){
+	console.log("adding a room");
+	rooms[roomId] = game;
+	//res.redirect("http://localhost/room/"+name+"/"+roomId);
+	//res.redirect("http://www.google.com");
+	res.send({'location': "/room/"+name+"/"+roomId});
+
+}
+
 var checkMobile = function (userAgent) {
 	var ua = userAgent.toLowerCase();
 	return ((ua.indexOf('iphone') != -1) || (ua.indexOf('android') != -1));
 }
 
 server.get("/", function (req, res) {
-	var usePrivateView = checkMobile(req.headers['user-agent']);
-	if (usePrivateView) {
-		res.render("private");
-	} else {
-		res.render("board");
+	res.render('index');
+});
+
+server.get("/room/:roomId", function (req, res) {
+	var roomId = req.params.roomId
+	var toReturn = "";
+	if (! rooms[roomId]){
+		console.log("making new room");
+		//rooms[roomId] = {players : {} , gameState : {} }
+		addRoom( req.query.name, roomId,  new logic.Game() , res )
+	}
+	else{
+		console.log("room: "+roomId);
+		res.send({"location" : "room/"+req.query.name+"/"+roomId})
+		//res.redirect("room/"+req.query.name+"/"+roomId)
 	}
 });
+
+server.get("/room/:name/:roomId", function (req, res) {
+	console.log("woo");
+	var roomId = req.params.roomId;
+	var name = req.params.name;
+	var game = rooms[roomId]
+	console.log(roomId);
+	console.log(name);
+	console.log(game);
+	if (name === "board"){
+		console.log("rendering board");
+		//res.render("board", game.gameState)
+		res.render("board");
+	}
+	else{
+		console.log('rendering player');
+		if ( ! game.players[name]){
+			console.log('adding player');
+			game.addPlayer(name)
+		}
+		console.log("rendering private");
+		//res.render("private" , game.players[name])
+		res.render("private");
+	}
+})
+
 
 server.listen(80);
 console.log("Express server started.");

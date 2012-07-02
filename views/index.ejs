@@ -1,0 +1,57 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>haro</title>
+		<meta name="description" content="An HTML5 game--with phones!">
+		<meta name="author" content="Ajay Tripathy, Kevin Hwang">
+
+		<link href="static/css/bootstrap.css" rel="stylesheet"></link>
+		<link href="static/css/bootstrap-responsive.css" rel="stylesheet"></link>
+		<link href="static/css/index.css" rel="stylesheet"></link>
+
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+		<script>
+
+			$(document).ready(function () {
+				var agent = navigator.userAgent.toLowerCase();
+
+				var isPrivate = ((agent.indexOf('iphone') != -1) || (agent.indexOf('android') != -1));
+
+				if (isPrivate) {
+					$("#nameDiv").css('display','inline');
+				} else {
+
+				}
+
+				$("#submit").click(function () {
+					if (isPrivate) {
+						$.get("/room/"+$("#roomid").val(), {
+							name: $("#name").val()
+						}, function (data) {
+							console.log("data callback!")
+							console.log(data);
+
+						});
+					} else {
+						$.get("/room/"+$("#roomId").val(), {
+							name: 'board'
+						}, function (data) {
+							console.log("data callback!!!");
+							console.log(data);
+							window.location = data.location;
+						});
+					}
+				})
+			});
+			
+		</script>
+
+	</head>
+	<body>
+		<div id="roomDiv">Room<input id="roomId"></input></div>
+		<div id="nameDiv" class="cool">Name<input id="name"></input></div>
+		<button id="submit">Submit</button>
+	</body>
+</html>
