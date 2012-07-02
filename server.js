@@ -75,15 +75,50 @@ server.get("/room/:name/:roomId", function (req, res) {
 		res.render("private");
 	}
 })
-/*
+
 io.sockets.on('connection', function(socket) {
   socket.emit('identify');
-  socket.on('checkIn', function (incoming) {
-      
-  }); 
-
-})
-*/
+  socket.on('checkIn', function(data) {
+    var roomId = data.roomId;
+    var name = data.name;
+    var additionalInfo = data.additionalInfo;
+    var game = rooms[roomId]
+    if (name !== 'board'){
+      game.addPlayer(name, socket.id, additionalInfo)     
+    }
+    socket.set('roomId' , roomId)
+    socket.set('user' , name)     
+  });
+  socket.on('startGame' , function(data) {
+    socket.get('roomId', function(err, roomId){
+      if (err) {throw err;}
+      var game = rooms[roomId];
+      var players = game.players;
+      var playerNames = Object.keys(players);
+      var firstPlayerSocketId = players[playerNames[0]].id;
+      io.sockets.socket(firstPlayerSocketId).emit('yourTurn', {turnNum : 0});
+    });
+  });
+  socket.on('endTurn', function(data) {
+    socket.get('roomId', function(err, roomId){
+      if (err) {throw err;}
+      var turnNum = data.turnNum;
+      var game = rooms[roomId];
+      var players = game.players;
+      var playerNames = Object.keys(players);
+      var indexOfNextPlayer = turnNum % playerNames.length
+      var nextPlayerId =  players[playerNames[indexOfNextPlayer]].id
+      io.sockets.socket(nextPlayerId).emit('yourTurn', {turnNum : turnNum});
+    });
+  });
+  socket.on('updateGameState' , function(data){
+    socket.get('roomId' , function(err, roomId){
+      var game = rooms[roomId]
+      game.update(data)
+      socket.broadcast.to(room).emit('updates', data)
+    });
+  });
+});
 
 server.listen(80);
 console.log("Express server started.");

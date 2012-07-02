@@ -14,7 +14,8 @@
 		}
 	],
 	"dependencies" : {
-		"ejs" : "0.7.1",
-		"express" : "2.5.8"
+		"ejs" : "~0.7.1",
+		"express" : "~2.5"
+    "socket.io" : "~1.1"
 	}
 }
