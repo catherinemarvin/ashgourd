@@ -68,12 +68,8 @@ server.get("/room/:name/:roomId", function (req, res) {
 	var roomId = req.params.roomId;
 	var name = req.params.name;
 	var game = rooms[roomId]
-	console.log(roomId);
-	console.log(name);
-	console.log(game);
 	if (name === "board"){
 		console.log("rendering board");
-
 		res.render("board");
 	}
 	else{
@@ -90,14 +86,20 @@ io.sockets.on('connection', function(socket) {
     var name = data.name;
     var additionalInfo = data.additionalInfo;
     var game = rooms[roomId]
-    if (name !== 'board'){
-      game.addPlayer(name, socket.id, additionalInfo)
-    }
-    else{
-      socket.emit('sync' , {gameState : game.gameState})
-    }
-    socket.set('roomId' , roomId)
-    socket.set('user' , name)     
+    if (game) {
+	    if (name !== 'board'){
+	      game.addPlayer(name, socket.id, additionalInfo);
+	      io.sockets.socket(socket.id).emit('initPlayer', { 'player' : game.players[name]})
+	    }
+	    else{
+	      socket.emit('sync' , {gameState : game.gameState})
+	    }
+	  socket.set('roomId' , roomId)
+	  socket.set('user' , name)   
+		}
+		else {
+			console.log("entered without having made a game")
+		}
   });
   socket.on('startGame' , function(data) {
     socket.get('roomId', function(err, roomId){

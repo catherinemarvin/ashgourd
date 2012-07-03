@@ -27,9 +27,10 @@
 				}
 
 				$("#submit").click(function () {
-					$.cookie("name", $("#nameInput").val());
+
 					$.cookie("roomId", $("#roomId").val());
 					if (isPrivate) {
+						$.cookie("name", $("#nameInput").val());
 						$.get("/room/"+$("#roomId").val(), {
 							name: $("#nameInput").val()
 						}, function (data) {
@@ -38,6 +39,7 @@
 							window.location = data.location;
 						});
 					} else {
+						$.cookie("name", "board");
 						$.get("/room/"+$("#roomId").val(), {
 							name: 'board'
 						}, function (data) {

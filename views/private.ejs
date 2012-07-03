@@ -11,13 +11,26 @@
 
 		<script src="/static/js/webkitdraggable.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="/static/js/jquery.cookie.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
 		
 
 		<script>
 			$(document).ready(function () {
 				var RD = new webkit_draggable("redbox", {});
 			});
-			
+			var socket = io.connect("http://localhost");
+			socket.on('identify', function () {
+				socket.emit("checkIn", {
+					roomId: $.cookie("roomId"),
+					name: $.cookie("name"), 
+					additionalInfo: {}
+				});
+			});
+			socket.on('initPlayer', function (data) {
+				var player = data.player;
+				console.log(player);
+			});
 		</script>
 	</head>
 	<body>
