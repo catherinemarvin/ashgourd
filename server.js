@@ -108,7 +108,7 @@ io.sockets.on('connection', function(socket) {
       var players = game.players;
       var playerNames = Object.keys(players);
       var firstPlayerSocketId = players[playerNames[0]].id;
-      io.sockets.socket(firstPlayerSocketId).emit('yourTurn', {turnNum : 0, game.visible});
+      io.sockets.socket(firstPlayerSocketId).emit('yourTurn', {turnNum : 0, 'visible' : game.visible});
     });
   });
   socket.on('endTurn', function(data) {
