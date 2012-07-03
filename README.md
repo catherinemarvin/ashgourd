@@ -1,9 +1,4 @@
 ashgourd
 ========
 
-An HTML5 board game.
-
-Dependencies
-=====
-
-`npm install ejs@0.7.1 express@2.5.8`
+An HTML5 board game. Use a computer (or a tablet!) as a board and hold your cards close to your chest with your smartphone.

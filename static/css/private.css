@@ -1,3 +1,23 @@
+body {
+	padding-top: 60px;
+	background: #53777A;
+	color: #FFFFFF;
+}
+
+.hero-unit {
+	background: #ECD078;
+	color: #000000;
+}
+
+.btn-success {
+	background: #C02942
+}
+
+
 #redbox {
 	background: #FF0000;
+}
+
+.card {
+	background: #542437;
 }
