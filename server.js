@@ -89,10 +89,10 @@ io.sockets.on('connection', function(socket) {
     if (game) {
 	    if (name !== 'board'){
 	      game.addPlayer(name, socket.id, additionalInfo);
-	      io.sockets.socket(socket.id).emit('initPlayer', { 'player' : game.players[name]})
+	      io.sockets.socket(socket.id).emit('initPlayer', { 'player' : game.players[name]});
 	    }
 	    else{
-	      socket.emit('sync' , {gameState : game.gameState})
+	      socket.emit('sync' , {visible : game.visible})
 	    }
 	  socket.set('roomId' , roomId)
 	  socket.set('user' , name)   
@@ -108,7 +108,7 @@ io.sockets.on('connection', function(socket) {
       var players = game.players;
       var playerNames = Object.keys(players);
       var firstPlayerSocketId = players[playerNames[0]].id;
-      io.sockets.socket(firstPlayerSocketId).emit('yourTurn', {turnNum : 0 , gameState : game.gameState});
+      io.sockets.socket(firstPlayerSocketId).emit('yourTurn', {turnNum : 0, game.visible});
     });
   });
   socket.on('endTurn', function(data) {
