@@ -95,18 +95,27 @@ io.sockets.on('connection', function(socket) {
 	      socket.emit('sync' , {visible : game.visible})
 	    }
 	  socket.set('roomId' , roomId)
-	  socket.set('user' , name)   
+	  socket.set('user' , name)
+	  socket.join(roomId);   
 		}
 		else {
 			console.log("entered without having made a game")
 		}
   });
   socket.on('startGame' , function(data) {
+  	console.log("game starting");
     socket.get('roomId', function(err, roomId){
       if (err) {throw err;}
       var game = rooms[roomId];
       var players = game.players;
       var playerNames = Object.keys(players);
+      if (playerNames.length < 1) {
+      	console.log("not enough players");
+      	console.log(roomId);
+      	//socket.broadcast.to(roomId).emit('error',{'type' : 'notEnoughPlayers'});
+      	io.sockets.in(roomId).emit('error', {'type' : 'notEnoughPlayers'});
+      	return;
+      }
       var firstPlayerSocketId = players[playerNames[0]].id;
       io.sockets.socket(firstPlayerSocketId).emit('yourTurn', {turnNum : 0, 'visible' : game.visible});
     });
@@ -127,7 +136,7 @@ io.sockets.on('connection', function(socket) {
     socket.get('roomId' , function(err, roomId){
       var game = rooms[roomId]
       game.update(data)
-      socket.broadcast.to(room).emit('updates', data)
+      io.sockets.in(roomId).emit('updates', data)
     });
   });
 });

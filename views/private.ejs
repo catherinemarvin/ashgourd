@@ -19,30 +19,59 @@
 		<script>
 			$(document).ready(function () {
 				var RD = new webkit_draggable("redbox", {});
-			});
-			var socket = io.connect("http://localhost");
-			socket.on('identify', function () {
-				socket.emit("checkIn", {
-					roomId: $.cookie("roomId"),
-					name: $.cookie("name"), 
-					additionalInfo: {}
-				});
-			});
-			socket.on('initPlayer', function (data) {
-				var player = data.player;
-				loadHand(player);
-				console.log(player);
-			});
+				var localTurnNum = null;
 
-			var loadHand = function (player) {
-				/*
-				var cards = player.cards
-				for (i in cards) {
-					var card = cards[i];
-					$("#playerHand").append(card+" ");
+
+				var socket = io.connect("http://localhost");
+				socket.on('identify', function () {
+					socket.emit("checkIn", {
+						roomId: $.cookie("roomId"),
+						name: $.cookie("name"), 
+						additionalInfo: {}
+					});
+				});
+				socket.on('initPlayer', function (data) {
+					var player = data.player;
+					loadHand(player);
+					console.log(player);
+				});
+
+				socket.on('yourTurn', function (data) {
+					console.log("MY TURN!");
+					console.log(data);
+					var turnNum = data.turnNum;
+					localTurnNum = turnNum;
+					var visible = data.visible;
+
+				});
+
+				socket.on('updates', function (data) {
+					console.log("UPDATES!!!");
+					console.log(data);
+				})
+
+				$("#submitTurn").click(function () {
+					console.log("turn over");
+					socket.emit('endTurn', {turnNum: localTurnNum})
+				})
+
+				$("#submitUpdate").click(function () {
+					console.log("modifying the board");
+					socket.emit('updateGameState', {cardPlayed : "AS"});
+
+				})
+
+				var loadHand = function (player) {
+					/*
+					var cards = player.cards
+					for (i in cards) {
+						var card = cards[i];
+						$("#playerHand").append(card+" ");
+					}
+					*/
 				}
-				*/
-			}
+			});
+			
 		</script>
 	</head>
 	<body>
@@ -72,5 +101,8 @@
 		<div id="redbox">
 			haro
 		</div>
+
+		<button id="submitTurn">END TURN</button>
+		<button id="submitUpdate">UPDATE BOARD</button>
 	</body>
 </html>

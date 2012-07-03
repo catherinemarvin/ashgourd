@@ -16,21 +16,36 @@
 
 
 		<script>
-			var socket = io.connect("http://localhost");
-			socket.on('identify', function () {
-				socket.emit("checkIn", {
-					roomId: $.cookie("roomId"),
-					name: $.cookie("name"), 
-					additionalInfo: {}
+			$(document).ready(function () {
+				var socket = io.connect("http://localhost");
+				socket.on('identify', function () {
+					socket.emit("checkIn", {
+						roomId: $.cookie("roomId"),
+						name: $.cookie("name"), 
+						additionalInfo: {}
+					});
 				});
-			});
 
-			socket.on('sync', function (data) {
-				var visible = data.visible;
-				console.log(visible);
-			});
+				socket.on('sync', function (data) {
+					var visible = data.visible;
+					console.log(visible);
+				});
 
-			
+				socket.on('error', function (data) {
+					console.log("Error!!!");
+					console.log(data);
+				})
+
+				$("#startButton").click(function () {
+					console.log("button clicked");
+					socket.emit("startGame");
+				});
+
+				socket.on('updates', function (data) {
+					console.log('here are the updates');
+					console.log(data);
+				})
+			});
 		</script>
 
 	</head>
@@ -39,7 +54,7 @@
 			<div class="hero-unit">
 				<h1>Welcome!</h1>
 				<p>Are you ready to begin?</p>
-				<p><button class="btn btn-primary">LET'S START</button></p>
+				<p><button id="startButton" class="btn btn-primary">LET'S START</button></p>
 			</div>
 			<div class="row">
 				<div class="span12">
