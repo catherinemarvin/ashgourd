@@ -11,9 +11,27 @@
 
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+		<script src="/static/js/jquery.cookie.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
+
+
+		<script>
+			var socket = io.connect("http://localhost");
+			socket.on('identify', function () {
+				socket.emit("checkIn", {
+					roomId: $.cookie("roomId"),
+					name: $.cookie("name"), 
+					additionalInfo: {}
+				});
+			});
+
+			
+		</script>
 
 	</head>
 	<body>
+		<div id="asdf">ASDF</div>
 		<p>Hello! I'm a board!</p>
+
 	</body>
 </html>

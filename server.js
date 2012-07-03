@@ -2,6 +2,7 @@ var express = require("express");
 var logic = require("./lib/Game");
 var server = express.createServer();
 var io = require('socket.io').listen(server);
+io.set("log level", 1);
 
 server.use(express.bodyParser());
 
@@ -73,7 +74,8 @@ server.get("/room/:name/:roomId", function (req, res) {
 	if (name === "board"){
 		console.log("rendering board");
 		//res.render("board", game.gameState)
-		res.render("board", {gameState : game.gameState});
+		//res.render("board", {gameState : game.gameState});
+		res.render("board", {gameState : {'foo' : "dicks"}});
 		//res.render("private");
 	}
 	else{
