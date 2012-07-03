@@ -73,10 +73,8 @@ server.get("/room/:name/:roomId", function (req, res) {
 	console.log(game);
 	if (name === "board"){
 		console.log("rendering board");
-		//res.render("board", game.gameState)
-		//res.render("board", {gameState : game.gameState});
-		res.render("board", {gameState : {'foo' : "dicks"}});
-		//res.render("private");
+
+		res.render("board");
 	}
 	else{
 		console.log("rendering private view");
@@ -93,7 +91,10 @@ io.sockets.on('connection', function(socket) {
     var additionalInfo = data.additionalInfo;
     var game = rooms[roomId]
     if (name !== 'board'){
-      game.addPlayer(name, socket.id, additionalInfo)     
+      game.addPlayer(name, socket.id, additionalInfo)
+    }
+    else{
+      socket.emit('sync' , {gameState : game.gameState})
     }
     socket.set('roomId' , roomId)
     socket.set('user' , name)     
@@ -105,13 +106,13 @@ io.sockets.on('connection', function(socket) {
       var players = game.players;
       var playerNames = Object.keys(players);
       var firstPlayerSocketId = players[playerNames[0]].id;
-      io.sockets.socket(firstPlayerSocketId).emit('yourTurn', {turnNum : 0});
+      io.sockets.socket(firstPlayerSocketId).emit('yourTurn', {turnNum : 0 , gameState : game.gameState});
     });
   });
   socket.on('endTurn', function(data) {
     socket.get('roomId', function(err, roomId){
       if (err) {throw err;}
-      var turnNum = data.turnNum;
+      var turnNum = data.turnNum + 1;
       var game = rooms[roomId];
       var players = game.players;
       var playerNames = Object.keys(players);
