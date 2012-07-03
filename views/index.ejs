@@ -1,7 +1,8 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>haro</title>
+		<title>Ash Gourd</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta name="description" content="An HTML5 game--with phones!">
 		<meta name="author" content="Ajay Tripathy, Kevin Hwang">
 
@@ -55,8 +56,27 @@
 
 	</head>
 	<body>
-		<div id="roomDiv">Room<input id="roomId"></input></div>
-		<div id="nameDiv">Name<input id="nameInput"></input></div>
-		<button id="submit">Submit</button>
+		<div class="container">
+			<div class="hero-unit">
+				<h1>Ash Gourd</h1>
+				<p>A tasty vegetable that makes a delicious drink!</p>
+			</div>
+			<div class="row">
+				<div class="span6 offset4">
+					<form action="javascript:void(0);">
+						<div id="roomDiv"><strong>Room</strong>
+							<br><input type="text" id="roomId"></input>
+						</div>
+						<div id="nameDiv"><strong>Name</strong>
+							<br><input type="text" id="nameInput"></input>
+						</div>
+						<div>
+							<button id="submit" class="btn btn-success">Submit</button>
+						</div>
+						<input id="dummySubmit" type="submit"></input>
+					</form>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>
