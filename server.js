@@ -123,8 +123,8 @@ io.sockets.on('connection', function(socket) {
   socket.on('endTurn', function(data) {
     socket.get('roomId', function(err, roomId){
       if (err) {throw err;}
-      var turnNum = data.turnNum + 1;
       var game = rooms[roomId];
+      var turnNum = game.nextTurn(data.turnNum);
       var players = game.players;
       var playerNames = Object.keys(players);
       var indexOfNextPlayer = turnNum % playerNames.length
